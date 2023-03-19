@@ -27,6 +27,8 @@ optional arguments:
 `git clone git@github.com:frankiejun/oralive.git`
 
 ### 依赖
+`sudo apt install speedtest-cli`  
+
 `sudo apt install python3`  
 
 `sudo pip install psutil`  
@@ -47,5 +49,5 @@ cpu占用20%，每次占用10秒，每1分钟占用一次，长期占用内存10
 
 也可以使用默认值(全为0使用的是默认值)：  
 
-`nohup oralive.py -c 0 -p 0 -i 0 -m 0 -n 0 &`  
+`nohup oralive.py -c 0 -p 0 -i 0 -m 0 -n 0 > /dev/null 2>&1 &`  
 
