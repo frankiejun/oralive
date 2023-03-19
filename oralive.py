@@ -18,7 +18,11 @@ parser.add_argument('-m' '--memory', dest='mem', help='占用内存(MB)')
 parser.add_argument('-n', '--netinterval', dest='netinterval', help='网络占用的时间间隔(分钟)')
 args = parser.parse_args()
 
-time_limit = args.pertime
+if args.pertime is not None:
+    time_limit = float(args.pertime)
+    if time_limit <= 0:
+        time_limit = 60
+
 sc = sched.scheduler(time.time, time.sleep)
 netsc = sched.scheduler(time.time, time.sleep)
 
@@ -40,7 +44,7 @@ if args.occu_rate is not None:
 if args.interval is not None:
     interval = int(args.interval)
     if interval <= 0 :
-        interval = 10
+        interval = 3
     
 
 def main():
