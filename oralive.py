@@ -8,6 +8,7 @@ import sys
 import ctypes
 import threading
 import os
+import cgroups
 
 parser = argparse.ArgumentParser(description='oracle服务器保活程序')
 
@@ -42,50 +43,57 @@ if args.occu_rate is not None:
         occu_rate = 20
 
 if args.interval is not None:
-    interval = int(args.interval)
-    if interval <= 0 :
-        interval = 3
+    ginterval = int(args.interval)
+    if ginterval <= 0 :
+        ginterval = 3
     
+def GetTickCount():
+    now = time.monotonic()
+    return int(now * 1000)
+
+
+def cpuCost():
+    start_time = time.time()
+    interval = 100
+    busyTime = interval * occu_rate / 100
+    idleTime = interval - busyTime
+    startTime = 0
+
+    """
+    within interval ms, interval = busyTime + idleTime,
+    spend busyTime ms to let cpu busy,
+    spend idleTime ms to let cpu idle
+    """
+    while True:
+        startTime = GetTickCount()
+        while (GetTickCount() - startTime) <= busyTime:
+            pass
+        time.sleep(idleTime/1000)
+        if  float(time.time()) - float(start_time) > float(time_limit):
+            break
+
+    print('进入下一次等待')
+    sc.enter(ginterval*60, 1, cpuCost, ())
 
 def main():
     size = 1024*1024*mem
     buffer = ctypes.create_string_buffer(size)
-    sc.enter(1, 1, wasteCup, ())
+    sc.enter(1, 1, cpuCost, ())
     netsc.enter(1, 1, netWaste, ())
+
     t1 = threading.Thread(target=netsc.run)
     t2 = threading.Thread(target=sc.run)
+    
     t1.start()
     t2.start()
     t1.join()
     t2.join()
+    cg.remove(pid)
+    cg.delete()
 
 def netWaste():
     os.system('speedtest-cli --simple > /tmp/net_speed_waste')
-
     netsc.enter(netinterval*60, 1, netWaste, ())
-
-def wasteCup():
-    start_time = time.time()
-    while True:
-        while True:
-            x = 1.0
-
-            for i in range(1, 100000):
-                x = x * i
-            cpu_usage = psutil.cpu_percent()
-            if cpu_usage < occu_rate:
-                continue
-            else:
-                time.sleep(0.05)
-                break
-
-       # print('判断时间，开始时间' + str(start_time) + ',结束时间:' + str(time.time()) + ',持续时间:'+str(time_limit))
-        if  float(time.time()) - float(start_time) > float(time_limit):
-            #print('大于持续时间')
-            break
-
-    print('进入下一次等待')
-    sc.enter(interval*60, 1, wasteCup, ())
 
 
 if __name__ == '__main__':
