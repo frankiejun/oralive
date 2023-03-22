@@ -31,8 +31,6 @@ optional arguments:
 
 `sudo apt install python3`  
 
-`sudo pip install psutil`  
-
 `sudo pip install argparse`  
 
 `sudo pip install sched`  
