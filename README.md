@@ -24,7 +24,7 @@ optional arguments:
                         
 ## 安装
 
-`git clone git@github.com:frankiejun/oralive.git`
+`git clone https://github.com/frankiejun/oralive.git`
 
 ### 依赖
 `sudo apt install speedtest-cli`  
