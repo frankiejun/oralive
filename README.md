@@ -29,13 +29,15 @@ optional arguments:
 ### 依赖
 `sudo apt install speedtest-cli`  
 
+·sudo apt install pip·
+
 `sudo apt install python3`  
 
 `sudo pip install argparse`  
 
-`sudo pip install sched`  
+·sudo pip install cgroups·
 
-`sudo pip install ctypes`  
+`sudo pip install psutil`  
 
 
 ## 运行
