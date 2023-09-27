@@ -54,7 +54,7 @@ if args.interval is not None:
     if ginterval <= 0 :
         ginterval = 3
 else:
-    ginterval = 1
+    ginterval = 3
 
 def GetTickCount():
     now = time.monotonic()
