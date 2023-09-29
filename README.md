@@ -47,7 +47,7 @@ cpu占用20%，每次占用10秒，每1分钟占用一次，长期占用内存10
 
 `nohup oralive.py -c 20 -p 10 -i 1 -m 100 -n 2 &`
 
-也可以使用默认值(全为0使用的是默认值)：  
+也可以使用默认值：  
 
-`nohup oralive.py -c 0 -p 0 -i 0 -m 0 -n 0 > /dev/null 2>&1 &`  
+`nohup oralive.py  > /dev/null 2>&1 &`  
 
